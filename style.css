@@ -1,0 +1,566 @@
+/* Definição de variáveis CSS para cores e transições */
+:root {
+  --primary-green: #00A388; /* Verde azulado principal do logo */
+  --darker-green: #008F7A; /* Tom mais escuro do verde azulado para hover */
+  --light-gray: #F5F5F5; /* Cinza claro de fundo */
+  --medium-gray: #808080; /* Cinza para textos e links */
+  --text-dark: #333333; /* Cor mais escura para texto principal */
+  --white: #FFFFFF;
+  --transition-speed: 0.4s ease-in-out;
+
+  /* NOVAS CORES PARA O EFEITO DE BRILHO PRATEADO/VERDE NA MISSÃO */
+  --shine-silver-base: #B0B0B0;
+  --shine-silver-highlight: #F0F0F0;
+  --shine-green-subtle: #A0E0D0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', sans-serif;
+  background-color: #000; /* Fundo preto inicial */
+  /* Animação para o fundo do body: preto -> cinza claro (pausa) -> branco total */
+  animation: revealBackground 8s ease-in-out forwards; /* Duração total aumentada para 8s */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Animação do fundo do body (preto -> cinza claro -> branco) */
+@keyframes revealBackground {
+  0% { background-color: #000; }
+  25% { background-color: var(--light-gray); } /* Chega no cinza claro (2s) */
+  75% { background-color: var(--light-gray); } /* Mantém o cinza claro por mais tempo (até 6s) */
+  100% { background-color: var(--white); }    /* Vai para o branco total (até 8s) */
+}
+
+/* Container principal da tela inicial */
+.main-container {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: transparent; /* Permite que o fundo do body seja visível */
+  padding: 20px;
+}
+
+/* Separador com degradê */
+.separator {
+  height: 50px;
+  background: linear-gradient(to bottom, var(--light-gray), var(--white));
+  width: 100%;
+}
+
+/* Logo central */
+.logo {
+  max-width: 350px;
+  width: 100%;
+  height: auto;
+  animation: fadeInZoom 1.5s ease-in-out forwards;
+  opacity: 0;
+  transform: scale(0.8);
+  animation-delay: 1.5s; /* Atraso para aparecer */
+}
+
+/* Animação de fade-in com zoom para o logo */
+@keyframes fadeInZoom {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Missão */
+.mission {
+  font-size: 1.1rem;
+  text-align: center;
+  position: absolute;
+  top: calc(25% - 1.5cm);
+  max-width: 700px;
+  width: 90%;
+  padding: 0 20px;
+  line-height: 1.5;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  overflow: hidden; /* Necessário para o background-clip */
+  
+  /* Apenas a animação inicial de aparecer */
+  animation: initialRevealMission 2s ease-in-out forwards; 
+  animation-delay: 2s; /* Atraso para aparecer */
+
+  /* NOVA: Transição para o fade-out controlado por JS */
+  transition: opacity 2s ease-in-out; /* Duração do fade-out */
+}
+
+/* Animação inicial de revelação da missão */
+@keyframes initialRevealMission {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); } /* GARANTE OPACIDADE 1 */
+}
+
+/* NOVA CLASSE CSS para o fade-out via JavaScript */
+.mission.fade-out {
+  opacity: 0 !important; /* !important garante que sobrescreva outras regras de opacidade */
+}
+
+/* Classe para aplicar o efeito de brilho contínuo no texto da missão */
+.mission.shine-active {
+  color: var(--text-dark); /* Cor base do texto da missão */
+  -webkit-text-fill-color: transparent; /* Para navegadores Webkit */
+  
+  background-image: linear-gradient(
+    90deg,
+    var(--text-dark) 0%,           /* Cor inicial: a cor base do texto */
+    var(--text-dark) 5%,          /* Mantém a cor base por um tempo */
+    rgba(255, 255, 255, 0.7) 30%, /* Ponto de brilho: branco semitransparente */
+    rgba(255, 255, 255, 0.7) 35%, /* Mantém o brilho por um pequeno ponto */
+    var(--text-dark) 60%,          /* Volta para a cor base do texto */
+    var(--text-dark) 100%          /* Mantém a cor base até o fim */
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text; /* ESSENCIAL */
+  background-clip: text;
+  
+  animation: shineTextMission 8s linear infinite; /* Animação de brilho contínua */
+  animation-delay: 0s; /* O brilho começa imediatamente ao aparecer */
+  /* A opacidade geral agora é controlada pela animação initialRevealMission e, posteriormente, pelo JS */
+}
+
+/* Animação do brilho contínuo no texto da missão */
+@keyframes shineTextMission {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Menu superior */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: transparent;
+  z-index: 1000;
+  padding: 15px 0;
+  animation: revealMenu 1.5s ease-in-out forwards;
+  animation-delay: 2.5s; /* Atraso para aparecer depois da missão */
+  opacity: 0;
+}
+
+@keyframes revealMenu {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.navbar-nav .nav-link {
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: 12px 25px;
+  color: var(--medium-gray) !important;
+  transition: color var(--transition-speed);
+
+  position: relative;
+  overflow: hidden;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--medium-gray) 0%,
+    var(--medium-gray) 5%,
+    rgba(255, 255, 255, 0.7) 30%, /* Brilho branco */
+    var(--medium-gray) 60%,
+    var(--medium-gray) 100%
+  );
+  background-size: 200% 100%;
+  background-position: -100% 0;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--primary-green) !important;
+  text-decoration: none;
+  background-position: 100% 0;
+  transition: background-position 0.8s ease-out;
+}
+
+/* Adiciona um efeito sutil de fundo para o menu quando scrollar */
+.navbar.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Modal de login e atualização - Estilos gerais */
+.modal-content {
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-logo {
+  max-width: 180px;
+  margin-bottom: 25px;
+}
+
+.form-control {
+  border-radius: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+}
+
+.btn-login {
+  background-color: var(--primary-green);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 25px;
+  color: var(--white);
+  width: 100%; /* Ajuste para preencher o espaço disponível */
+  font-weight: 600;
+  transition: background-color var(--transition-speed), transform 0.2s ease-in-out;
+}
+
+.btn-login:hover {
+  background-color: var(--darker-green);
+  transform: translateY(-2px);
+}
+
+.btn-secondary { /* Estilo para o botão "Atualizar Depois" ou "Voltar" */
+  background-color: #6c757d;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 25px;
+  color: var(--white);
+  width: 100%; /* Ajuste para preencher o espaço disponível */
+  font-weight: 600;
+  transition: background-color var(--transition-speed), transform 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.login-options a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+.login-options a:hover {
+  color: var(--darker-green);
+  text-decoration: underline;
+}
+
+.register-link {
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.register-link a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+.register-link a:hover {
+  color: var(--darker-green);
+  text-decoration: underline;
+}
+
+/* Rodapé */
+footer {
+  background-color: var(--white);
+  border-top: 1px solid #ececec;
+  padding: 40px 0;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+  animation: fadeInFooter 1.5s ease-in-out forwards;
+  animation-delay: 3s;
+  opacity: 0;
+}
+
+@keyframes fadeInFooter {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+footer .footer-left,
+footer .footer-center,
+footer .footer-right {
+  flex: 1;
+  min-width: 280px;
+}
+
+footer .footer-left {
+  text-align: left;
+}
+
+footer .footer-left .top-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+footer .footer-left p:first-child {
+  color: var(--medium-gray);
+  font-weight: 600;
+  margin: 0;
+  font-size: 1rem;
+}
+
+footer .footer-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+footer .footer-center .logo-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+footer .footer-center img {
+  max-width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+footer .footer-right {
+  text-align: right;
+}
+
+footer .footer-right .top-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+footer .section-title {
+  color: var(--medium-gray);
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+footer a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+footer a:hover {
+  color: var(--darker-green);
+  text-decoration: underline;
+}
+
+/* Responsividade para o rodapé */
+@media (max-width: 992px) {
+  footer .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  footer .footer-left,
+  footer .footer-center,
+  footer .footer-right {
+    max-width: 100%;
+    text-align: center;
+  }
+  footer .footer-left .top-line,
+  footer .footer-right .top-line {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .mission {
+    font-size: 1rem; /* Ajustado para telas menores */
+    top: calc(18% - 1.5cm); /* Ajuste de posição para telas menores */
+    white-space: normal; /* Permitir quebra de linha em telas pequenas */
+    padding: 0 10px; /* Reduzir padding em telas pequenas */
+    max-width: 95%; /* Ajuste para telas menores */
+  }
+  .logo {
+    max-width: 250px;
+  }
+  .navbar-nav .nav-link {
+    padding: 8px 15px;
+  }
+}
+
+/* ESTILOS DO CHATBOT - INÍCIO */
+
+/* Botão flutuante do Chatbot (Floating Action Button) */
+.chatbot-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--primary-green);
+  color: var(--white);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform 0.2s ease-in-out;
+  z-index: 1050;
+}
+
+.chatbot-fab:hover {
+  background-color: var(--darker-green);
+  transform: translateY(-3px);
+}
+
+/* Estilização do Modal do Chatbot */
+.modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+  max-height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  background-color: var(--primary-green);
+  color: var(--white);
+  border-bottom: none;
+  padding: 15px 20px;
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+  margin: -0.5rem -0.5rem -0.5rem auto;
+}
+
+.chatbot-body {
+  flex-grow: 1;
+  padding: 15px;
+  background-color: #f7f7f7;
+  overflow-y: auto;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-message {
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.chatbot-message.bot {
+  background-color: var(--white);
+  color: var(--text-dark);
+  align-self: flex-start;
+  border: 1px solid #e0e0e0;
+}
+
+.chatbot-message.user {
+  background-color: var(--primary-green);
+  color: var(--white);
+  align-self: flex-end;
+}
+
+.chatbot-footer {
+  padding: 15px;
+  border-top: none;
+  background-color: var(--white);
+  display: flex;
+  gap: 10px;
+}
+
+.chatbot-input {
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+}
+
+.chatbot-send-btn {
+  background-color: var(--primary-green);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.chatbot-send-btn:hover {
+  background-color: var(--darker-green);
+}
+
+/* Responsividade para o chatbot em telas pequenas */
+@media (max-width: 576px) {
+  .chatbot-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+  .chatbot-fab svg {
+    width: 25px;
+    height: 25px;
+  }
+  .chatbot-content {
+    max-height: 80vh;
+  }
+}
+/* ESTILOS DO CHATBOT - FIM */
+
+/* NOVOS ESTILOS PARA O MODAL DE ATUALIZAÇÃO */
+/* Estilo para as labels do modal de atualização - mais sutis */
+.modal-label-subtle {
+  font-size: 0.9rem; /* Levemente menor */
+  color: var(--medium-gray); /* Cor mais suave */
+  margin-bottom: 5px; /* Espaçamento menor entre label e input */
+  display: block; /* Garante que a label ocupe sua própria linha */
+}
+
+/* Garante rolagem no modal-body se o conteúdo for grande */
+.modal-body {
+  overflow-y: auto; /* Permite rolagem vertical */
+  max-height: 70vh; /* Limita a altura máxima para não ocupar 100% da tela */
+}
+
+/* Para garantir que o modal-content não fique muito espremido em telas pequenas */
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem; /* Reduz margem nas bordas */
+  }
+  .modal-body {
+    padding: 1rem; /* Ajusta padding interno */
+  }
+}
